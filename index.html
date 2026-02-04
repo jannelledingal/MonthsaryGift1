@@ -33,6 +33,7 @@
             color: rgba(251, 53, 105, 0.2);
             user-select: none;
             animation: floatUp linear infinite;
+            z-index: 2; /* Keep hearts above background but below content */
         }
 
         @keyframes floatUp {
@@ -212,7 +213,9 @@
         <source src="Niki-PlotTwist.mp3" type="audio/mpeg">
     </audio>
 
-    <div class="background-container" id="bgContainer"></div>
+    <div class="background-container" id="bgContainer">
+        <div class="rain-container" id="main-bg-rain"></div>
+    </div>
 
     <div id="main-ui" class="content-wrapper">
         <h1>For My Babi</h1>
@@ -228,7 +231,7 @@
     </div>
 
     <div id="gift-container">
-        <div class="rain-container" id="rain"></div>
+        <div class="rain-container" id="garden-rain"></div>
         <div class="garden-message">
             <h2 style="font-style: italic; margin-bottom: 5px;">I Love You Forever, Babi ko</h2>
             <p> Blue rose bouquet for my favorite person.</p>
@@ -245,6 +248,7 @@
     </div>
 
     <script>
+        // Initialize Hearts
         const bgContainer = document.getElementById('bgContainer');
         for (let i = 0; i < 15; i++) {
             const heart = document.createElement('div');
@@ -254,6 +258,11 @@
             heart.style.animationDuration = Math.random() * 5 + 7 + 's';
             bgContainer.appendChild(heart);
         }
+
+        // Initialize Background Rain immediately
+        window.onload = () => {
+            createRain('main-bg-rain');
+        };
 
         const messageText = "I love you babi! I am so incredibly lucky to have you. Thank you for being the best part of my life. Here's to us and many more months of love! Do not let anything stop us, whatever how hard it would be. Anata o aishitemasu MWA! 💖";
         
@@ -269,11 +278,11 @@
 
         function celebrate() {
             document.getElementById('bgMusic').play().catch(() => {});
-            document.getElementById('main-ui').style.display = 'block'; // Ensure main UI is visible
+            document.getElementById('main-ui').style.display = 'block'; 
             document.getElementById('popup').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
             document.getElementById('typewriter-text').innerHTML = ""; 
-            document.getElementById('gift-trigger-btn').style.display = 'none'; // Hide until typing finishes
+            document.getElementById('gift-trigger-btn').style.display = 'none'; 
             typeWriter(messageText, 0, () => {
                 document.getElementById('gift-trigger-btn').style.display = 'block';
             });
@@ -284,11 +293,13 @@
             document.getElementById('overlay').style.display = 'none';
             document.getElementById('main-ui').style.display = 'none';
             document.getElementById('gift-container').style.display = 'flex';
-            createRain();
+            createRain('garden-rain'); // Start rain in garden
         }
 
-        function createRain() {
-            const rainContainer = document.getElementById('rain');
+        // Updated rain function to accept a container ID
+        function createRain(containerId) {
+            const rainContainer = document.getElementById(containerId);
+            if (!rainContainer) return;
             rainContainer.innerHTML = ""; 
             for (let i = 0; i < 80; i++) {
                 const drop = document.createElement('div');
@@ -302,7 +313,7 @@
 
         function replayMessage() {
             document.getElementById('gift-container').style.display = 'none';
-            celebrate(); // Re-trigger the typing sequence
+            celebrate(); 
         }
 
         function goHome() {
@@ -313,4 +324,3 @@
     </script>
 </body>
 </html>
-
