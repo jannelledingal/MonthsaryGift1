@@ -1,5 +1,6 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "special/love.html" }
+    { "source": "/(.*)", "destination": "/love.html" }
   ]
+
 }
