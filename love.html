@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Babi</title>
+    <style>
+        :root {
+            --primary-bg: #1a0924;
+            --accent-cyan: #51eaea;
+            --accent-pink: #FB3569;
+            --rose-blue: #00d2ff;
+            --rose-glow: #91e9ff;
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            width: 100%; height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', sans-serif;
+            background: var(--primary-bg);
+            display: flex; justify-content: center; align-items: center;
+        }
+
+        /* Floating Hearts Background */
+        .background-container {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: 1; overflow: hidden;
+        }
+
+        .bg-heart {
+            position: absolute; bottom: -10%;
+            color: rgba(251, 53, 105, 0.2);
+            user-select: none;
+            animation: floatUp linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        .content-wrapper {
+            position: relative; z-index: 10;
+            text-align: center; padding: 2.5rem;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            max-width: 320px;
+        }
+
+        h1 { 
+            font-size: 2.2rem; 
+            background: linear-gradient(to right, var(--accent-cyan), var(--accent-pink));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .heart-btn {
+            background-color: var(--accent-pink);
+            width: 50px; height: 50px;
+            position: relative;
+            transform: rotate(-45deg);
+            margin: 45px auto 25px;
+            cursor: pointer; border: none; display: block;
+            animation: pulse 1.5s infinite;
+        }
+
+        .heart-btn::before, .heart-btn::after {
+            content: ""; background-color: var(--accent-pink);
+            border-radius: 50%; width: 50px; height: 50px; position: absolute;
+        }
+        .heart-btn::before { top: -25px; left: 0; }
+        .heart-btn::after { left: 25px; top: 0; }
+
+        @keyframes pulse {
+            0% { transform: rotate(-45deg) scale(1); }
+            50% { transform: rotate(-45deg) scale(1.1); }
+            100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        .overlay {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 99;
+        }
+
+        .popup-card {
+            display: none; position: fixed; top: 50%; left: 50%;
+            transform: translate(-50%, -50%); z-index: 100;
+            background: white; padding: 30px; border-radius: 20px;
+            color: #270f34; width: 80%; max-width: 300px; text-align: center;
+        }
+
+        .btn-main {
+            display: none; padding: 15px 20px; border: none;
+            background: var(--accent-pink); border-radius: 25px;
+            cursor: pointer; font-weight: bold; width: 100%;
+            color: white; font-size: 1rem;
+        }
+
+        /* --- GARDEN SECTION --- */
+        #gift-container {
+            display: none; position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%; z-index: 500;
+            background: #050505;
+            align-items: flex-end; justify-content: center;
+        }
+
+        .rain-container {
+            position: absolute; width: 100%; height: 100%;
+            top: 0; left: 0; pointer-events: none; z-index: 5;
+        }
+        .drop {
+            position: absolute; width: 1px; height: 12vmin;
+            background: linear-gradient(to bottom, transparent, var(--rose-blue));
+            animation: rainFall linear infinite;
+        }
+        @keyframes rainFall {
+            0% { transform: translateY(-20vh); opacity: 0; }
+            20% { opacity: 0.6; }
+            100% { transform: translateY(120vh); opacity: 0; }
+        }
+
+        .flowers { 
+            position: relative; 
+            margin-bottom: 2vh; 
+            z-index: 10; 
+            height: 65vh;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        
+        .flower { 
+            position: absolute; 
+            bottom: 0; 
+            transform-origin: bottom center; 
+        }
+
+        .flower--1 { transform: rotate(-25deg); }
+        .flower--2 { transform: rotate(0deg); }
+        .flower--3 { transform: rotate(25deg); }
+        
+        .flower__line {
+            height: 55vmin; width: 1.5vmin;
+            background-image: linear-gradient(to top, #0c4a4e, #14757a);
+            border-radius: 10px;
+            animation: grow-stem 4s ease-out forwards;
+        }
+        
+        .flower__leafs { 
+            position: absolute; top: -8vmin; left: 50%; transform: translateX(-50%);
+            animation: blooming 3s 2.5s backwards;
+            filter: drop-shadow(0 0 15px var(--rose-blue));
+        }
+        
+        .flower__leaf {
+            position: absolute; bottom: 0; left: 50%; 
+            width: 10vmin; height: 13vmin;
+            border-radius: 50% 50% 50% 50% / 80% 80% 20% 20%;
+            background: linear-gradient(to bottom, var(--rose-glow), var(--rose-blue));
+            transform-origin: bottom center;
+        }
+
+        .flower__leaf--1 { transform: translateX(-50%) rotate(0deg); }
+        .flower__leaf--2 { transform: translateX(-50%) rotate(35deg); }
+        .flower__leaf--3 { transform: translateX(-50%) rotate(-35deg); }
+        .flower__leaf--4 { transform: translateX(-50%) rotate(65deg); }
+
+        .garden-message {
+            position: absolute; top: 8%; width: 100%; text-align: center;
+            color: white; z-index: 600; opacity: 0;
+            animation: finalFadeIn 3s 5s forwards;
+            padding: 0 15px;
+            box-sizing: border-box;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+        .btn-action:hover { background: rgba(255,255,255,0.3); }
+
+        @keyframes finalFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes grow-stem { from { height: 0; } }
+        @keyframes blooming { 0% { transform: scale(0); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="background-container" id="bgContainer"></div>
+
+    <div id="main-ui" class="content-wrapper">
+        <h1>For My Babi</h1>
+        <button class="heart-btn" onclick="celebrate()"></button>
+    </div>
+
+    <div class="overlay" id="overlay"></div>
+    
+    <div id="popup" class="popup-card">
+        <h2 style="color: var(--accent-pink);">Happy Monthsary! ✨</h2>
+        <div id="typewriter-text"></div>
+        <button id="gift-trigger-btn" class="btn-main" onclick="openGift()">Open My Gift 🎁</button>
+    </div>
+
+    <div id="gift-container">
+        <div class="rain-container" id="rain"></div>
+        <div class="garden-message">
+            <h2 style="font-style: italic; margin-bottom: 5px;">I Love You Forever, Babi ko</h2>
+            <p> Blue rose bouquet for my favorite person.</p>
+            <div class="button-group">
+                <button class="btn-action" onclick="replayMessage()">Replay Message 🔄</button>
+                <button class="btn-action" onclick="goHome()">Home 🏠</button>
+            </div>
+        </div>
+        <div class="flowers">
+            <div class="flower flower--1"><div class="flower__leafs"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div></div><div class="flower__line"></div></div>
+            <div class="flower flower--2"><div class="flower__leafs"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div></div><div class="flower__line"></div></div>
+            <div class="flower flower--3"><div class="flower__leafs"><div class="flower__leaf flower__leaf--1"></div><div class="flower__leaf flower__leaf--2"></div><div class="flower__leaf flower__leaf--3"></div><div class="flower__leaf flower__leaf--4"></div></div><div class="flower__line"></div></div>
+        </div>
+    </div>
+
+    <script>
+        const bgContainer = document.getElementById('bgContainer');
+        for (let i = 0; i < 15; i++) {
+            const heart = document.createElement('div');
+            heart.className = 'bg-heart';
+            heart.innerHTML = '❤';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 5 + 7 + 's';
+            bgContainer.appendChild(heart);
+        }
+
+        const messageText = "I love you babi! I am so incredibly lucky to have you. Thank you for being the best part of my life. Here's to us and many more months of love! Do not let anything stop us, whatever how hard it would be. Anata o aishitemasu MWA! 💖";
+        
+        function typeWriter(text, i, fnCallback) {
+            if (i < text.length) {
+                document.getElementById("typewriter-text").innerHTML = text.substring(0, i+1) +'<span style="color:var(--accent-pink)">|</span>';
+                setTimeout(() => typeWriter(text, i + 1, fnCallback), 50);
+            } else if (typeof fnCallback == 'function') {
+                document.getElementById("typewriter-text").innerHTML = text;
+                setTimeout(fnCallback, 500);
+            }
+        }
+
+        function celebrate() {
+            document.getElementById('bgMusic').play().catch(() => {});
+            document.getElementById('main-ui').style.display = 'block'; // Ensure main UI is visible
+            document.getElementById('popup').style.display = 'block';
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('typewriter-text').innerHTML = ""; 
+            document.getElementById('gift-trigger-btn').style.display = 'none'; // Hide until typing finishes
+            typeWriter(messageText, 0, () => {
+                document.getElementById('gift-trigger-btn').style.display = 'block';
+            });
+        }
+
+        function openGift() {
+            document.getElementById('popup').style.display = 'none';
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('gift-container').style.display = 'flex';
+            createRain();
+        }
+
+        function createRain() {
+            const rainContainer = document.getElementById('rain');
+            rainContainer.innerHTML = ""; 
+            for (let i = 0; i < 80; i++) {
+                const drop = document.createElement('div');
+                drop.className = 'drop';
+                drop.style.left = Math.random() * 100 + 'vw';
+                drop.style.animationDuration = (Math.random() * 0.5 + 1) + 's';
+                drop.style.animationDelay = -Math.random() * 2 + 's';
+                rainContainer.appendChild(drop);
+            }
+        }
+
+        function replayMessage() {
+            document.getElementById('gift-container').style.display = 'none';
+            celebrate(); // Re-trigger the typing sequence
+        }
+
+        function goHome() {
+            document.getElementById('gift-container').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            document.getElementById('gift-trigger-btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
