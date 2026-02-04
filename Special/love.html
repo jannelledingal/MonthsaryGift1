@@ -299,7 +299,7 @@
     </div>
 
     <script>
-        const bgContainer = document.getElementById('bgContainer');
+  const bgContainer = document.getElementById('bgContainer');
         const heartIcons = ['❤', '💖', '❣', '💕'];
         for (let i = 0; i < 20; i++) {
             const heart = document.createElement('div');
@@ -312,7 +312,9 @@
         }
 
         const messageText = "I love you babi! I am so incredibly lucky to have you. Thank you for being the best part of my life. Here's to us and many more months of love! 💖";
-        const images = ['pic1.jpg', 'pic2.jpg', 'pic3.jpg'];
+        
+        // Added full local paths just to be safe
+        const images = ['./pic1.jpg', './pic2.jpg', './pic3.jpg'];
         let currentImgIndex = 0;
 
         function typeWriter(text, i, fnCallback) {
@@ -326,7 +328,10 @@
         }
 
         function celebrate() {
-            document.getElementById('bgMusic').play().catch(() => {});
+            const music = document.getElementById('bgMusic');
+            music.play().catch(() => {
+                console.log("Music needs a tap to start!");
+            });
             document.getElementById('popup').style.display = 'block';
             document.getElementById('overlay').style.display = 'block';
             typeWriter(messageText, 0, () => {
@@ -338,6 +343,7 @@
         function startSlideshow() {
             document.getElementById('popup').style.display = 'none';
             document.getElementById('slideshow-container').style.display = 'block';
+            // Set first image
             document.getElementById('slideshow-img').src = images[0];
         }
 
